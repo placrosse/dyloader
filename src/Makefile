@@ -4,7 +4,7 @@ CFLAGS += -I../include
 VPATH += ../include/libexec
 
 .PHONY: all
-all: libexec.a system-test
+all: libexec.a sample system-test
 
 libexec.a: system.o
 	$(AR) $(ARFLAGS) $@ $^
@@ -21,6 +21,11 @@ sample: CFLAGS=-static -nodefaultlibs -nostartfiles
 
 .PHONY: clean
 clean:
+	$(RM) libexec.a
+	$(RM) system.o
+	$(RM) system-test system-test.o
+	$(RM) sample.o sample
 
 .PHONY: test
-test:
+test: system-test
+	./system-test
