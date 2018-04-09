@@ -1,4 +1,4 @@
-libexec
-=======
+dyloader
+========
 
-A C library for loading ELF executables.
+A C library for dynamically loading executables and shared object files.

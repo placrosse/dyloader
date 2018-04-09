@@ -1,7 +1,5 @@
-// =================================================
-// libexec -- An executable loader for BareMetal OS
+// ==================================================
+// dyloader -- A platform independent dynamic loader.
 //
-// Copyright (C) 2017 Return Infinity -- see LICENSE
-//
-// Version 1.0
-// =================================================
+// Copyright (C) 2018 Return Infinity -- see LICENSE
+// ==================================================

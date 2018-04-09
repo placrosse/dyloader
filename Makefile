@@ -1,3 +1,3 @@
-.PHONY: all clean test
-all clean target:
-	$(MAKE) -C src $@
+.PHONY: all clean test install
+all clean target install:
+	$(MAKE) -C lib $@
