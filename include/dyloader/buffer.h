@@ -13,10 +13,15 @@
 extern "C" {
 #endif
 
+/// @defgroup buffer-api Buffer API
+/// @brief The interface for dealing
+/// with memory buffers.
+
 /// @brief A general purpose buffer.
 /// The buffer structure is used for
 /// allocations and can describe page
 /// permissions as well.
+/// @ingroup buffer-api
 struct dyloader_buffer {
 	/// @brief The data associated with
 	/// the buffer.
@@ -34,6 +39,12 @@ struct dyloader_buffer {
 	/// can be executed.
 	dyloader_bool exec_perm;
 };
+
+/// @brief Initializes the buffer's fields
+/// to reasonable default values.
+/// @param buffer The buffer structure to initialize.
+/// @ingroup buffer-api
+void dyloader_buffer_init(struct dyloader_buffer *buffer);
 
 #ifdef __cplusplus
 } // extern "C"
