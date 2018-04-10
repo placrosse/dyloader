@@ -22,7 +22,8 @@ struct dyloader_host_data {
 	// nothing required here for linux
 };
 
-static struct dyloader_host_data *builtin_init(void) {
+static struct dyloader_host_data *
+builtin_init(void) {
 
 	struct dyloader_host_data *host_data = malloc(sizeof(*host_data));
 	if (host_data == NULL)
@@ -31,13 +32,15 @@ static struct dyloader_host_data *builtin_init(void) {
 	return host_data;
 }
 
-static void builtin_done(struct dyloader_host_data *host_data) {
+static void
+builtin_done(struct dyloader_host_data *host_data) {
 	if (host_data != DYLOADER_NULL)
 		free(host_data);
 }
 
-static int builtin_get_info(struct dyloader_host_data *host_data,
-                            struct dyloader_host_info *host_info) {
+static int
+builtin_get_info(struct dyloader_host_data *host_data,
+                 struct dyloader_host_info *host_info) {
 
 	(void) host_data;
 
@@ -47,9 +50,10 @@ static int builtin_get_info(struct dyloader_host_data *host_data,
 	return 0;
 }
 
-static int builtin_open(struct dyloader_host_data *host_data,
-                        struct dyloader_buffer *buffer,
-                        const char *path) {
+static int
+builtin_open(struct dyloader_host_data *host_data,
+             struct dyloader_buffer *buffer,
+             const char *path) {
 
 	int fd = open(path, O_RDONLY);
 	if (fd < 0) {
@@ -96,8 +100,9 @@ static int builtin_open(struct dyloader_host_data *host_data,
 	return 0;
 }
 
-static void builtin_close(struct dyloader_host_data *host_data,
-                          struct dyloader_buffer *buffer) {
+static void
+builtin_close(struct dyloader_host_data *host_data,
+              struct dyloader_buffer *buffer) {
 
 	(void) host_data;
 
@@ -106,10 +111,34 @@ static void builtin_close(struct dyloader_host_data *host_data,
 	buffer->size = 0;
 }
 
+static void *
+builtin_malloc(struct dyloader_host_data *host_data,
+               dyloader_size size) {
+
+	(void) host_data;
+
+	void *addr = malloc(size);
+	if (addr == NULL)
+		return DYLOADER_NULL;
+	else
+		return addr;
+}
+
+static void
+builtin_free(struct dyloader_host_data *host_data,
+             void *addr) {
+
+	(void) host_data;
+
+	free(addr);
+}
+
 const struct dyloader_host dyloader_builtin_host = {
 	builtin_init,
 	builtin_done,
 	builtin_get_info,
 	builtin_open,
-	builtin_close
+	builtin_close,
+	builtin_malloc,
+	builtin_free
 };
