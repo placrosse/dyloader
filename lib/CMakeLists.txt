@@ -8,6 +8,8 @@ add_library("dyloader"
 
 add_library("dyloader-elf"
 	"dyloader-elf.c"
+	"elf.h"
+	"elf.c"
 	"format-elf.h"
 	"format-elf.c")
 
