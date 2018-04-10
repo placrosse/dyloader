@@ -47,7 +47,7 @@ elf_run(struct dyloader_format_data *format_data,
 
 	dyloader_size size = buffer->size;
 
-	if (!elf_verify_magic(data, size)) {
+	if (!elf_verify_header(data, size)) {
 		return DYLOADER_EINVAL;
 	}
 

@@ -17,6 +17,14 @@ dyloader_bool
 elf_verify_magic(const unsigned char *data,
                  dyloader_size size);
 
+dyloader_bool
+elf_verify_class(const unsigned char *data,
+                 dyloader_size size);
+
+dyloader_bool
+elf_verify_header(const unsigned char *data,
+                  dyloader_size size);
+
 #ifdef __cplusplus
 } /* extern "C" { */
 #endif
