@@ -6,10 +6,15 @@ add_library("dyloader"
 	"format.c"
 	"host.c")
 
-add_library("dyloader-elf" "elf.c" "format-elf.c")
+add_library("dyloader-elf"
+	"dyloader-elf.c"
+	"format-elf.h"
+	"format-elf.c")
 
 if (UNIX)
-	add_library("dyloader-builtin" "builtin.c" "host-linux.c")
+	add_library("dyloader-builtin"
+		"dyloader-builtin.c"
+		"host-linux.c")
 endif (UNIX)
 
 add_executable("sample" "sample.c")
