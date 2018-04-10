@@ -8,6 +8,7 @@
 #define DYLOADER_HOST_H
 
 #include <dyloader/arch.h>
+#include <dyloader/types.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -39,24 +40,31 @@ struct dyloader_host {
 	struct dyloader_host_data *(*init)(void);
 	/// @brief Releases memory allocated
 	/// by the host instance.
-	void (*done)(struct dyloader_host_data *data);
+	void (*done)(struct dyloader_host_data *host_data);
 	/// @brief Used to get information about the host.
-	int (*get_info)(struct dyloader_host_data *data,
-	                struct dyloader_host_info *info);
+	int (*get_info)(struct dyloader_host_data *host_data,
+	                struct dyloader_host_info *host_info);
 	/// @brief Used to open files on the host system.
-	int (*open)(struct dyloader_host_data *data,
+	int (*open)(struct dyloader_host_data *host_data,
 	            struct dyloader_buffer *buffer,
 	            const char *path);
 	/// @brief Closes a file that was allocated
 	/// by the open function.
-	void (*close)(struct dyloader_host_data *data,
+	void (*close)(struct dyloader_host_data *host_data,
 	              struct dyloader_buffer *buffer);
+	/// @brief Allocates memory for the library.
+	void *(*malloc)(struct dyloader_host_data *host_data,
+	                dyloader_size size);
+	/// @brief Releases memory
+	void (*free)(struct dyloader_host_data *host_data,
+	             void *addr);
 };
 
 /// @brief Initializes the host implementation.
 /// @param host A host structure that contains the
 /// callbacks required to initialize the host.
-struct dyloader_host_data *dyloader_host_init(const struct dyloader_host *host);
+struct dyloader_host_data *
+dyloader_host_init(const struct dyloader_host *host);
 
 /// @brief Releases the memory allocated by
 /// the host. This is called when the structure
@@ -64,8 +72,9 @@ struct dyloader_host_data *dyloader_host_init(const struct dyloader_host *host);
 /// @param host An initialized host structure.
 /// @param data A pointer to a structure containing
 /// the host data that is going to be released.
-void dyloader_host_done(const struct dyloader_host *host,
-                        struct dyloader_host_data *data);
+void
+dyloader_host_done(const struct dyloader_host *host,
+                   struct dyloader_host_data *data);
 
 /// @brief Opens a file on the host system.
 /// @param host An initialized host structure.
@@ -76,10 +85,11 @@ void dyloader_host_done(const struct dyloader_host *host,
 /// @returns Zero on success, an errno value
 /// on failure.
 /// @ingroup host-api
-int dyloader_host_open(const struct dyloader_host *host,
-                       struct dyloader_host_data *data,
-                       struct dyloader_buffer *buffer,
-                       const char *path);
+int
+dyloader_host_open(const struct dyloader_host *host,
+                   struct dyloader_host_data *data,
+                   struct dyloader_buffer *buffer,
+                   const char *path);
 
 /// @brief Closes a file that was opened
 /// with @ref dyloader_host_open. This is
@@ -88,9 +98,32 @@ int dyloader_host_open(const struct dyloader_host *host,
 /// @param data The host implementation data.
 /// @param buffer The buffer containing the file data.
 /// @ingroup host-api
-void dyloader_host_close(const struct dyloader_host *host,
-                         struct dyloader_host_data *data,
-                         struct dyloader_buffer *buffer);
+void
+dyloader_host_close(const struct dyloader_host *host,
+                    struct dyloader_host_data *data,
+                    struct dyloader_buffer *buffer);
+
+/// @brief Allocates memory for reading and writing.
+/// @param host An initialized host structure.
+/// @param host_data Host implementation data
+/// @param size The number of bytes to allocate.
+/// @returns On success, the address of the memory region.
+/// On failure, @ref DYLOADER_NULL is returned.
+/// @ingroup host-api
+void *
+dyloader_host_malloc(const struct dyloader_host *host,
+                     struct dyloader_host_data *host_data,
+                     dyloader_size size);
+
+/// @brief Releases memory back to the system.
+/// @param host An initialized host structure.
+/// @param host_data Host implementation data.
+/// @param The address to free.
+/// @ingroup host-api
+void
+dyloader_host_free(const struct dyloader_host *host,
+                   struct dyloader_host_data *host_data,
+                   void *addr);
 
 #ifdef __cplusplus
 } /* extern "C" { */
