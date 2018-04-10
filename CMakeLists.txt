@@ -9,5 +9,6 @@ if (CMAKE_COMPILER_IS_GNUCC)
 endif (CMAKE_COMPILER_IS_GNUCC)
 
 add_subdirectory("lib")
+add_subdirectory("utils")
 
 enable_testing()

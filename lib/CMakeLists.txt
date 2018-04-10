@@ -3,7 +3,10 @@ cmake_minimum_required(VERSION 2.6)
 add_library("dyloader"
 	"buffer.c"
 	"dyloader.c"
+	"format.c"
 	"host.c")
+
+add_library("dyloader-elf" "elf.c" "format-elf.c")
 
 if (UNIX)
 	add_library("dyloader-builtin" "builtin.c" "host-linux.c")
